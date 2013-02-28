@@ -27,10 +27,13 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   </head>
   <body>
-    <video autoplay id="video" class="video-box"></video>
-    <canvas id="canvasVideo" class="buffer-canvas"></canvas>
+    <div class="videodiv">
+      <video autoplay id="video" class="hide-video"></video>
+    </div>
+    <canvas id="canvasVideo" class="video-canvas"></canvas>
 
     <canvas id="canvasDrawing" class="drawing-canvas"></canvas>
+    <button id="change-color-btn" class="color-btn">Change the color!</button>
   </body>
   <script src="draw.js"></script>
 </html>

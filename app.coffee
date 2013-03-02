@@ -30,6 +30,11 @@ io.sockets.on 'connection', (socket) ->
   socket.on 'draw', (data) ->
     socket.broadcast.emit 'draw', data
 
+  socket.on 'disconnect', (data) ->
+    num_sockets--
+    io.sockets.emit 'client_count',
+      count: num_sockets
+
 
 
 port = process.env.PORT or 8000

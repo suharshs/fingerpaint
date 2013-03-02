@@ -6,7 +6,8 @@ var video,
   ctx_width,ctx_height,
   dctx_width,dctx_height,
   width_ratio, height_ratio,
-  brush_color, color_button;
+  brush_color, color_button,
+  video_started = false;
 
 
 function init_brush_color(){
@@ -19,19 +20,23 @@ function start_video(){
     video.src = window.URL.createObjectURL(localMediaStream);
     video.onloadedmetadata = function(e) {};
     start_process_loop();
-    }, function(){console.log("couldn't connect to webcam");});
- 
+  }, function(){console.log("couldn't connect to webcam");});
+
   // cache variables
   video = document.getElementById('video');
   canvas = document.getElementById('canvasVideo');
   drawing = document.getElementById('canvasDrawing');
+  others = document.getElementById('othersCanvas');
   color_button = document.getElementById('change-color-btn');
   drawing.width = width;
   drawing.height = height;
   canvas.width = width;
   canvas.height = height;
+  others.width = width;
+  others.height = height;
   ctx = canvas.getContext('2d');
   dctx = drawing.getContext('2d');
+  octx = others.getContext('2d');
   ctx_width = canvas.width;
   ctx_height = canvas.height;
   dctx_width = drawing.width;
@@ -68,6 +73,7 @@ function change_color(){
 }
 
 function start_process_loop(){
+  video_started = true;
   set_up_color_grabber();
 
   var offset = 3;
@@ -185,7 +191,9 @@ function draw_circle(x,y,context,color, rad){
 }
 
 // this function will process the data recieved from another user
-function draw_line(sx,sy,ex,ey){
+function draw_line(sx,sy,ex,ey,color,context){
+  context.strokeStyle = color;
+  context.lineWidth = 3;
   context.beginPath();
   context.moveTo(sx + 0.5, sy + 0.5);
   context.lineTo(ex + 0.5, ey + 0.5);

@@ -8,6 +8,7 @@ socket.on('client_count', function(data){
 });
 
 socket.on('draw', function(data){
-  
-  console.log(data);
+  if (video_started){
+    draw_line(data.start[0], data.start[1], data.end[0], data.end[1], data.color, octx);
+  }
 });

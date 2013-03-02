@@ -14,10 +14,23 @@ app.use express.static(__dirname + '/public')
 # Routes
 app.get '/', routes.index
 
+num_sockets = 0
+
 # Socket.IO
 io.sockets.on 'connection', (socket) ->
-  socket.emit 'hello',
-    hello: 'says server'
+  num_sockets++
 
-port = process.env.PORT or 3000
+  # update clients on the new number of users
+  io.sockets.emit 'client_count',
+    count: num_sockets
+  
+  # TODO: UPDATE NEW USER ON CURRENT STATE
+  
+  # update the users with a new draw
+  socket.on 'draw', (data) ->
+    socket.broadcast.emit 'draw', data
+
+
+
+port = process.env.PORT or 8000
 app.listen port, -> console.log "Listening on port " + port

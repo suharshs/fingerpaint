@@ -51,3 +51,11 @@ canvas{
     left: 850px;
     top: 550px;
 }
+
+#user-count {
+    float: right;
+    background: none;
+    color: white;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    text-align: right;
+}

@@ -77,4 +77,5 @@ canvas{
     font-size: 18pt;
     /*font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;*/
     text-align: right;
+    margin-right: 5px;
 }

@@ -1,5 +1,11 @@
 host = '#{ host }'
 socket = io.connect host
+test = 5
 
-socket.on 'hello', (data) ->
-  socket.emit 'hello', { hello: 'says client' }
+# TODO: UPDATE NEW USER ON CURRENT STATE
+
+socket.on 'client_count', (data) ->
+  console.log data.count
+
+socket.on 'draw', (data) ->
+  console.log data

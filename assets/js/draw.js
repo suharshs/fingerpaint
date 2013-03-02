@@ -99,7 +99,7 @@ function bfs_process(data, offset){
     var x = curr[0];
     var y = curr[1];
     var i = 4*xy_to_index(x,y);
-    if (color_in_range(data[i+0], data[i+1], data[i+2], 500)){
+    if (color_in_range(data[i+0], data[i+1], data[i+2], 1000)){
       prev_coord = curr;
       return curr;
     } else {
@@ -144,11 +144,14 @@ function color_in_range(r,g,b,range){
 
 // The mousemove event handler.
 var started = false;
+var prev_point;
 
 function draw (x,y,context,color) {
   var coord = scale_coord([x,y]);
   x = coord[0];
   y = coord[1];
+  socket.emit('draw', {start: prev_point, end: [x + 0.5, y +0.5], color: color});
+  prev_point = [x + 0.5, y +0.5];
   if (!started) {
     context.fillStyle = color;
     context.lineWidth = 5;
@@ -167,6 +170,14 @@ function draw_circle(x,y,context,color, rad){
   context.strokeStyle = color;
   context.beginPath();
   context.arc(x, y, rad, 0 , 2 * Math.PI, false);
+  context.stroke();
+}
+
+// this function will process the data recieved from another user
+function draw_line(sx,sy,ex,ey){
+  context.beginPath();
+  context.moveTo(sx + 0.5, sy + 0.5);
+  context.lineTo(ex + 0.5, ey + 0.5);
   context.stroke();
 }
 

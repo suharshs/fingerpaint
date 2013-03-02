@@ -84,11 +84,6 @@ function start_video(){
   video = document.getElementById('video');
 }
 
-function set_up_color_grabber(){
-  // first set up the circle where we will sense the color
-  var color = "rbg(" + 0 + "," + 0 + "," + 0 + ")";
-  draw_circle(width - 30, height - 30,dctx,color,10);
-}
 
 function change_color(){
   var r = 0,
@@ -111,7 +106,6 @@ function change_color(){
 
 function start_process_loop(){
   video_started = true;
-  set_up_color_grabber();
 
   var offset = 3;
   window.setInterval(function() {

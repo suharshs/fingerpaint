@@ -10,28 +10,17 @@ head
   meta(name='author', content='AUTHOR')
   meta(name="viewport", content="width=device-width, initial-scale=1.0")
 
-  != css('bootstrap')
-  != css('bootstrap-responsive')
+  //!= css('bootstrap')
+  //!= css('bootstrap-responsive')
+  != css('style')
 
-body(style="padding-top: 60px; padding-bottom: 40px;")
-  .navbar.navbar-fixed-top
-    .navbar-inner
-      .container
-        a.btn.btn-navbar(data-toggle="collapse", data-target=".nav-collapse")
-          span.icon-bar
-          span.icon-bar
-          span.icon-bar
-        a.brand(href="#") YOUR_APP_NAME
-        .nav-collapse
-          ul.nav
-            li.active
-              a(href="#") Home
-
+body
   != body
 
-  != js('jquery')
-  != js('bootstrap')
+  //!= js('jquery')
+  //!= js('bootstrap')
   script(src="/socket.io/socket.io.js")
   != js('socket_handlers')
+  != js('draw')
 
 | </html>

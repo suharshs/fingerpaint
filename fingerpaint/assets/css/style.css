@@ -1,0 +1,34 @@
+body{
+    background: black;
+}
+
+canvas {
+    position: absolute;
+    width: 800px; 
+    height: 600px;
+    overflow: hidden; 
+}
+
+.hide-video{
+    position: absolute; 
+    width: 100%; 
+    height: 100%; 
+    overflow: hidden; 
+    display:none;
+}
+
+.video-canvas{
+    opacity: 0.4;
+}
+
+.drawing-canvas{
+    opacity: 1;
+}
+
+.color-btn{
+    position: absolute;
+    width: 200px;
+    height: 50px;
+    left: 850px;
+    top: 550px;
+}

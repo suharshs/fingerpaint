@@ -95,3 +95,8 @@ canvas{
     bottom: 2px;
     font-size: 10pt;
 }
+
+.instructions {
+    float: left;
+    font-size: 10pt;
+}

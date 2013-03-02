@@ -31,7 +31,6 @@ function start_video(){
   dctx_height = drawing.height;
   ctx.translate(ctx_width, 0);
   ctx.scale(-1, 1);
-  //ctx.globalCompositeOperation = 'xor';
 }
 
 function set_up_color_grabber(){

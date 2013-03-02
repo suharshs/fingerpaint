@@ -45,10 +45,11 @@ function init_canvi(){
   draw_line(width/2-27,height/2,width/2+27,height/2,"rgb(255,255,255)",chctx);
   draw_circle(width/2,height/2,chctx,"rgb(255,255,255)", 20);
   $("#crosshair").hide();
-
+  $('.instructions').hide();
 
   $(window).on("keydown",function(e){
     $(".textdiv").fadeOut(1000);
+    $(".instructions").fadeIn(1000);
     $(window).off("keydown");
     start_video();
   });

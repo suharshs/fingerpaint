@@ -60,7 +60,7 @@ function start_video(){
     video.onloadedmetadata = function(e) {};
     start_process_loop();
   }, function(err){
-    console.log("couldn't connect to webcam: " + err);
+    console.log(err);
     $('body').append("Couldn't connect to webcam");
   });
 

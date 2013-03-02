@@ -14,20 +14,11 @@ function init_brush_color(){
   brush_color = [100,150,100];
 }
 
-function start_video(){
-  navigator.webkitGetUserMedia({video: true, audio: true}, function(localMediaStream) {
-    var video = document.querySelector('video');
-    video.src = window.URL.createObjectURL(localMediaStream);
-    video.onloadedmetadata = function(e) {};
-    start_process_loop();
-  }, function(){console.log("couldn't connect to webcam");});
-
+function init_canvi(){
   // cache variables
-  video = document.getElementById('video');
   canvas = document.getElementById('canvasVideo');
   drawing = document.getElementById('canvasDrawing');
   others = document.getElementById('othersCanvas');
-  color_button = document.getElementById('change-color-btn');
   drawing.width = width;
   drawing.height = height;
   canvas.width = width;
@@ -45,6 +36,28 @@ function start_video(){
   height_ratio = dctx_height / ctx_height;
   ctx.translate(ctx_width, 0);
   ctx.scale(-1, 1);
+
+  $(window).on("keydown",function(e){
+    $(".textdiv").hide();
+    $(window).off("keydown");
+    start_video();
+    $(window).on("keydown",function(e){
+      change_color();
+    });
+  });
+}
+
+
+
+function start_video(){
+  navigator.webkitGetUserMedia({video: true, audio: true}, function(localMediaStream) {
+    var video = document.querySelector('video');
+    video.src = window.URL.createObjectURL(localMediaStream);
+    video.onloadedmetadata = function(e) {};
+    start_process_loop();
+  }, function(){console.log("couldn't connect to webcam");});
+
+  video = document.getElementById('video');
 }
 
 function set_up_color_grabber(){
@@ -192,16 +205,18 @@ function draw_circle(x,y,context,color, rad){
 
 // this function will process the data recieved from another user
 function draw_line(sx,sy,ex,ey,color,context){
+  var startcoord = scale_coord([sx,sy]);
+  var endcoord = scale_coord([ex,ey]);
   context.strokeStyle = color;
   context.lineWidth = 3;
   context.beginPath();
-  context.moveTo(sx + 0.5, sy + 0.5);
-  context.lineTo(ex + 0.5, ey + 0.5);
+  context.moveTo(startcoord[0] + 0.5, startcoord[1] + 0.5);
+  context.lineTo(endcoord[1] + 0.5, endcoord[1] + 0.5);
   context.stroke();
 }
 
 // finally start the application
 init_brush_color();
-start_video();
+init_canvi();
 
 

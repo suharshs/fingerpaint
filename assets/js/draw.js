@@ -3,8 +3,8 @@ var video,
   canvas, drawing,
   ctx, dctx,
   width = window.innerHeight * 4/3, height = window.innerHeight,
-  ctx_width,ctx_height,
-  dctx_width,dctx_height,
+  width,height,
+  width,height,
   width_ratio, height_ratio,
   brush_color, color_button,
   video_started = false;
@@ -19,6 +19,9 @@ function init_canvi(){
   canvas = document.getElementById('canvasVideo');
   drawing = document.getElementById('canvasDrawing');
   others = document.getElementById('othersCanvas');
+  crosshair = document.getElementById('crosshair');
+  crosshair.width = width;
+  crosshair.height = height;
   drawing.width = width;
   drawing.height = height;
   canvas.width = width;
@@ -28,26 +31,28 @@ function init_canvi(){
   ctx = canvas.getContext('2d');
   dctx = drawing.getContext('2d');
   octx = others.getContext('2d');
-  ctx_width = canvas.width;
-  ctx_height = canvas.height;
-  dctx_width = drawing.width;
-  dctx_height = drawing.height;
-  width_ratio = dctx_width / ctx_width;
-  height_ratio = dctx_height / ctx_height;
-  ctx.translate(ctx_width, 0);
+  chctx = crosshair.getContext('2d');
+  width = canvas.width;
+  height = canvas.height;
+  width = drawing.width;
+  height = drawing.height;
+  width_ratio = width / width;
+  height_ratio = height / height;
+  ctx.translate(width, 0);
   ctx.scale(-1, 1);
 
+  draw_line(width/2,height/2-27,width/2,height/2+27,"rgb(255,255,255)",chctx);
+  draw_line(width/2-27,height/2,width/2+27,height/2,"rgb(255,255,255)",chctx);
+  draw_circle(width/2,height/2,chctx,"rgb(255,255,255)", 20);
+  $("#crosshair").hide();
+
+
   $(window).on("keydown",function(e){
-    $(".textdiv").hide();
+    $(".textdiv").fadeOut(1000);
     $(window).off("keydown");
     start_video();
-    $(window).on("keydown",function(e){
-      change_color();
-    });
   });
 }
-
-
 
 function start_video(){
   navigator.getMedia = ( navigator.getUserMedia ||
@@ -58,6 +63,18 @@ function start_video(){
     var video = document.querySelector('video');
     video.src = window.URL.createObjectURL(localMediaStream);
     video.onloadedmetadata = function(e) {};
+    $(window).on("keydown",function(e){
+        $("#crosshair").fadeIn(1000);
+        $(window).off("keydown");
+    });
+    $(window).on("keyup", function(e){
+        change_color();
+        $("#crosshair").fadeOut(1000);
+      $(window).on("keydown",function(e){
+          $("#crosshair").fadeIn(1000);
+        $(window).off("keydown");
+      });
+    });
     start_process_loop();
   }, function(){console.log("couldn't connect to webcam");});
 
@@ -67,18 +84,19 @@ function start_video(){
 function set_up_color_grabber(){
   // first set up the circle where we will sense the color
   var color = "rbg(" + 0 + "," + 0 + "," + 0 + ")";
-  draw_circle(dctx_width - 30, dctx_height - 30,dctx,color,10);
+  draw_circle(width - 30, height - 30,dctx,color,10);
 }
 
 function change_color(){
   var r = 0,
       g = 0,
       b = 0;
-  var data = ctx.getImageData(0, 0, ctx_width, ctx_height).data;
-  for (var x = dctx_width - 35; x < dctx_width - 25; x++){
-    for (var y = dctx_height - 35; y < dctx_height - 25; y++){
+  var data = ctx.getImageData(0, 0, width, height).data;
+  for (var x = Math.floor(width/2) - 5; x < Math.floor(width/2) + 5; x++){
+    for (var y = Math.floor(height/2) - 5; y < Math.floor(height/2) + 5; y++){
       coord = scale_coord([x,y]);
       var i = 4 * xy_to_index(x,y);
+      console.log(i);
       r += data[i];
       g += data[i + 1];
       b += data[i + 2];
@@ -94,9 +112,9 @@ function start_process_loop(){
 
   var offset = 3;
   window.setInterval(function() {
-    ctx.drawImage(video, 0, 0, ctx_width, ctx_height);
+    ctx.drawImage(video, 0, 0, width, height);
 
-    var data = ctx.getImageData(0, 0, ctx_width, ctx_height).data;
+    var data = ctx.getImageData(0, 0, width, height).data;
 
     var coords = bfs_process(data,offset);
 
@@ -156,11 +174,11 @@ function bfs_add_neighbor(x, y, queue, visited_list) {
 function coord_in_canvas(coord){
   var x = coord[0],
     y = coord[1];
-  return (x >= 0 && x < ctx_width && y >= 0 && y < ctx_height);
+  return (x >= 0 && x < width && y >= 0 && y < height);
 }
 
 function xy_to_index(x,y){
-  return y*ctx_width + x;
+  return y*width + x;
 }
 
 function scale_coord(coord){
@@ -214,7 +232,7 @@ function draw_line(sx,sy,ex,ey,color,context){
   context.lineWidth = 3;
   context.beginPath();
   context.moveTo(startcoord[0] + 0.5, startcoord[1] + 0.5);
-  context.lineTo(endcoord[1] + 0.5, endcoord[1] + 0.5);
+  context.lineTo(endcoord[0] + 0.5, endcoord[1] + 0.5);
   context.stroke();
 }
 

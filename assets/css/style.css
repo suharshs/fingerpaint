@@ -32,18 +32,22 @@ body{
     text-align:center;
 }
 
-.textdiv{
-    font-size: 49pt;
+.crosshairdiv{
     position: absolute;
     width: 100%;
     text-align:center;
 }
 
+.textdiv{
+    font-size: 49pt;
+    position: absolute;
+    width: 100%;
+    text-align:center;
+    margin-top: 25%;
+}
+
 canvas{
     display: inline;
-    -webkit-box-shadow: 0 5px #000000;
-    -moz-box-shadow: 0 5px #000000;
-    box-shadow: 0 5px #000000;
 }
 
 .others-canvas{
@@ -58,17 +62,14 @@ canvas{
     opacity: 1;
 }
 
-.color-btn{
-    position: absolute;
-    width: 200px;
-    height: 50px;
-    left: 850px;
-    top: 550px;
+.crosshair-canvas{
+    opacity: 1;
 }
 
 #user-count {
     float: right;
     background: none;
+    margin-top: 15px;
     font-size: 18pt;
     /*font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;*/
     text-align: right;

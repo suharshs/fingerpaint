@@ -65,7 +65,6 @@ function start_video(){
     video.onloadedmetadata = function(e) {};
 
     var kd_handler = function(e){
-      alert('pressed ' + e.which);
         switch (e.which){
           // Letter 'c'
           case 67:
@@ -82,7 +81,9 @@ function start_video(){
     var ku_handler = function(e) {
       switch (e.which){
           // Letter 'c'
-          case 67: break;
+          case 67:
+            clear_drawing(true);
+            break;
           // Spacebar
           case 32:
             change_color();
@@ -254,8 +255,23 @@ function draw_line(sx,sy,ex,ey,color,context){
 
 
 function clear_drawing(broadcast) {
-  octx.clearRect(0, 0, octx.width, octx.height);
-  dctx.clearRect(0, 0, dctx.width, dctx.height);
+// Store the current transformation matrix
+octx.save();
+dctx.save();
+
+octx.beginPath();
+dctx.beginPath();
+
+// Use the identity matrix while clearing the canvas
+octx.setTransform(1, 0, 0, 1, 0, 0);
+octx.clearRect(0, 0, width, height);
+dctx.setTransform(1, 0, 0, 1, 0, 0);
+dctx.clearRect(0, 0, width, height);
+
+// Restore the transform
+octx.restore();
+dctx.restore();
+
   if (broadcast) {
     socket.emit('clear', {});
   }

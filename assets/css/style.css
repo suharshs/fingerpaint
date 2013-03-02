@@ -2,6 +2,8 @@ body{
     background: url("/img/bg2.jpg");
     font-family: 'Poiret One', cursive;
     color: white;
+    margin: 0;
+    overflow: hidden;
 }
 
 .hide-video{
@@ -23,12 +25,14 @@ body{
 .drawingdiv{
     position: absolute;
     width: 100%;
+    height: 100%;
     text-align:center;
 }
 
 .othersdiv{
     position: absolute;
     width: 100%;
+    height: 100%;
     text-align:center;
 }
 

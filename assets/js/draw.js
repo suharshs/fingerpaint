@@ -50,7 +50,11 @@ function init_canvi(){
 
 
 function start_video(){
-  navigator.webkitGetUserMedia({video: true, audio: true}, function(localMediaStream) {
+  navigator.getMedia = ( navigator.getUserMedia ||
+                    navigator.webkitGetUserMedia ||
+                       navigator.mozGetUserMedia ||
+                       navigator.msGetUserMedia);
+  navigator.getMedia({video: true, audio: true}, function(localMediaStream) {
     var video = document.querySelector('video');
     video.src = window.URL.createObjectURL(localMediaStream);
     video.onloadedmetadata = function(e) {};
@@ -64,7 +68,6 @@ function set_up_color_grabber(){
   // first set up the circle where we will sense the color
   var color = "rbg(" + 0 + "," + 0 + "," + 0 + ")";
   draw_circle(dctx_width - 30, dctx_height - 30,dctx,color,10);
-  color_button.onclick = change_color;
 }
 
 function change_color(){

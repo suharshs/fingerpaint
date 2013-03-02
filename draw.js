@@ -2,6 +2,7 @@
 var video,
   canvas, drawing,
   ctx, dctx,
+  width = 800, height = 600,
   ctx_width,ctx_height,
   dctx_width,dctx_height,
   brush_color, color_button;
@@ -23,6 +24,10 @@ function start_video(){
   canvas = document.getElementById('canvasVideo');
   drawing = document.getElementById('canvasDrawing');
   color_button = document.getElementById('change-color-btn');
+  drawing.width = width;
+  drawing.height = height;
+  canvas.width = width;
+  canvas.height = height;
   ctx = canvas.getContext('2d');
   dctx = drawing.getContext('2d');
   ctx_width = canvas.width;
@@ -47,6 +52,7 @@ function change_color(){
   var data = ctx.getImageData(0, 0, ctx_width, ctx_height).data;
   for (var x = dctx_width - 35; x < dctx_width - 25; x++){
     for (var y = dctx_height - 35; y < dctx_height - 25; y++){
+      coord = scale_coord([x,y]);
       var i = 4 * xy_to_index(x,y);
       r += data[i];
       g += data[i + 1];
@@ -60,70 +66,31 @@ function change_color(){
 function start_process_loop(){
   set_up_color_grabber();
 
+  var offset = 1;
   window.setInterval(function() {
-    
     ctx.drawImage(video, 0, 0, ctx_width, ctx_height);
 
     var data = ctx.getImageData(0, 0, ctx_width, ctx_height).data;
 
-    //var coords = process_video_frame(data);
-    var coords = bfs_process(data);
-    //var coords = process_closest_color(data);
-    
+    var coords = bfs_process(data,offset);
+
     if (coords){
+      offset = 1;
       var r = brush_color[0], g = brush_color[1], b = brush_color[2];
       var color = 'rgb(' + r + ', ' + g+ ', ' + b + ')';
       draw(coords[0],coords[1], dctx, color);
     } else{
+      offset = 5;
       started = false; // reset the draw function
     }
 
-  }, 33);
-}
-
-function process_video_frame(data){
-  for (var x = 0; x < ctx_width; x+=1){
-    for (var y = 0; y < ctx_height; y+=1){
-      
-      // add average color of blocks here
-      if (color_in_range(data[i+0], data[i+1], data[i+2], 70)){
-        dctx.arc(x, y, 5, 0 , 2 * Math.PI, false);
-        return [x, y];
-      }
-    }
-  }
-  return false;
-}
-
-function process_closest_color(data){
-  var best = [0,0];
-  for (var x = 0; x < ctx_width; x+=1){
-    for (var y = 0; y < ctx_height; y+=1){
-      // add average color of blocks here
-      if (color_closer([x,y],best,data)){
-        best = [x, y];
-      }
-    }
-  }
-  var i = 4*xy_to_index(best[0],best[1]);
-  if (color_in_range(data[i+0], data[i+1], data[i+2], 70)){
-    return best;
-  }
-  return false;
-}
-
-function color_closer(coord, best, data){
-  var i = 4*xy_to_index(coord[0],coord[1]);
-  var currColorValue = (brush_color[0]-data[i])*(brush_color[0]-data[i]) + (brush_color[1]-data[i+1])*(brush_color[1]-data[i+1]) + (brush_color[2]-data[i+2])*(brush_color[2]-data[i+2]);
-  i = 4*xy_to_index(best[0],best[1]);
-  var bestColorValue = (brush_color[0]-data[i])*(brush_color[0]-data[i]) + (brush_color[1]-data[i+1])*(brush_color[1]-data[i+1]) + (brush_color[2]-data[i+2])*(brush_color[2]-data[i+2]);
-  return (currColorValue < bestColorValue);
+  }, 100);
 }
 
 var prev_coord = [0,0]; // stores the previous coordinate that was found
 // we will start the search from the prev_coord
 // for some reason this is actually a lot slower
-function bfs_process(data){
+function bfs_process(data, offset){
   var queue = [prev_coord];
   var visited_list = {};
   visited_list[xy_to_index(prev_coord[0], prev_coord[1])] = true;
@@ -136,21 +103,21 @@ function bfs_process(data){
       prev_coord = curr;
       return curr;
     } else {
-      if (coord_in_canvas([x-1,y]) && !(xy_to_index(x-1,y) in visited_list)){
-        queue.push([x-1,y]);
-        visited_list[xy_to_index(x-1,y)] = true;
+      if (coord_in_canvas([x-offset,y]) && !(xy_to_index(x-offset,y) in visited_list)){
+        queue.push([x-offset,y]);
+        visited_list[xy_to_index(x-offset,y)] = true;
       }
-      if (coord_in_canvas([x+1,y]) && !(xy_to_index(x+1,y) in visited_list)){
-        queue.push([x+1,y]);
-        visited_list[xy_to_index(x+1,y)] = true;
+      if (coord_in_canvas([x+offset,y]) && !(xy_to_index(x+offset,y) in visited_list)){
+        queue.push([x+offset,y]);
+        visited_list[xy_to_index(x+offset,y)] = true;
       }
-      if (coord_in_canvas([x,y-1]) && !(xy_to_index(x,y-1) in visited_list)){
-        queue.push([x,y-1]);
-        visited_list[xy_to_index(x,y-1)] = true;
+      if (coord_in_canvas([x,y-offset]) && !(xy_to_index(x,y-offset) in visited_list)){
+        queue.push([x,y-offset]);
+        visited_list[xy_to_index(x,y-offset)] = true;
       }
-      if (coord_in_canvas([x,y+1]) && !(xy_to_index(x,y+1) in visited_list)){
-        queue.push([x,y+1]);
-        visited_list[xy_to_index(x,y+1)] = true;
+      if (coord_in_canvas([x,y+offset]) && !(xy_to_index(x,y+offset) in visited_list)){
+        queue.push([x,y+offset]);
+        visited_list[xy_to_index(x,y+offset)] = true;
       }
     }
   }

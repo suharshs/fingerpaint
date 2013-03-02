@@ -50,7 +50,11 @@ function init_canvi(){
 
 
 function start_video(){
-  navigator.getUserMedia({video: true, audio: true}, function(localMediaStream) {
+  navigator.getMedia = ( navigator.getUserMedia ||
+                    navigator.webkitGetUserMedia ||
+                       navigator.mozGetUserMedia ||
+                       navigator.msGetUserMedia);
+  navigator.getMedia({video: true, audio: true}, function(localMediaStream) {
     var video = document.querySelector('video');
     video.src = window.URL.createObjectURL(localMediaStream);
     video.onloadedmetadata = function(e) {};

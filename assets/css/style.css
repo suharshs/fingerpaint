@@ -23,7 +23,7 @@ body{
     width: 800px; 
     height: 600px;
     overflow: hidden; 
-    opacity: 1;
+    opacity: .4;
 }
 
 .drawing-canvas{

@@ -5,7 +5,9 @@ var video,
   width = 800, height = 600,
   ctx_width,ctx_height,
   dctx_width,dctx_height,
+  width_ratio, height_ratio,
   brush_color, color_button;
+
 
 function init_brush_color(){
   brush_color = [100,150,100];
@@ -34,6 +36,8 @@ function start_video(){
   ctx_height = canvas.height;
   dctx_width = drawing.width;
   dctx_height = drawing.height;
+  width_ratio = dctx_width / ctx_width;
+  height_ratio = dctx_height / ctx_height;
   ctx.translate(ctx_width, 0);
   ctx.scale(-1, 1);
 }
@@ -66,7 +70,7 @@ function change_color(){
 function start_process_loop(){
   set_up_color_grabber();
 
-  var offset = 5;
+  var offset = 3;
   window.setInterval(function() {
     ctx.drawImage(video, 0, 0, ctx_width, ctx_height);
 
@@ -75,12 +79,12 @@ function start_process_loop(){
     var coords = bfs_process(data,offset);
 
     if (coords){
-      offset = 5;
+      offset = 3;
       var r = brush_color[0], g = brush_color[1], b = brush_color[2];
       var color = 'rgb(' + r + ', ' + g+ ', ' + b + ')';
       draw(coords[0],coords[1], dctx, color);
     } else{
-      offset = 10;
+      offset = 5;
       started = false; // reset the draw function
     }
 
@@ -99,34 +103,38 @@ function bfs_process(data, offset){
     var x = curr[0];
     var y = curr[1];
     var i = 4*xy_to_index(x,y);
-    if (color_in_range(data[i+0], data[i+1], data[i+2], 500)){
+    var in_range = color_in_range(data[i+0], data[i+1], data[i+2], 2000);
+    if (in_range){
       prev_coord = curr;
       return curr;
     } else {
-      if (coord_in_canvas([x-offset,y]) && !(xy_to_index(x-offset,y) in visited_list)){
-        queue.push([x-offset,y]);
-        visited_list[xy_to_index(x-offset,y)] = true;
-      }
-      if (coord_in_canvas([x+offset,y]) && !(xy_to_index(x+offset,y) in visited_list)){
-        queue.push([x+offset,y]);
-        visited_list[xy_to_index(x+offset,y)] = true;
-      }
-      if (coord_in_canvas([x,y-offset]) && !(xy_to_index(x,y-offset) in visited_list)){
-        queue.push([x,y-offset]);
-        visited_list[xy_to_index(x,y-offset)] = true;
-      }
-      if (coord_in_canvas([x,y+offset]) && !(xy_to_index(x,y+offset) in visited_list)){
-        queue.push([x,y+offset]);
-        visited_list[xy_to_index(x,y+offset)] = true;
-      }
+      bfs_add_neighbor(x-offset, y, queue, visited_list);
+      bfs_add_neighbor(x+offset, y, queue, visited_list);
+      bfs_add_neighbor(x, y-offset, queue, visited_list);
+      bfs_add_neighbor(x, y+offset, queue, visited_list);
     }
   }
   return false;
 }
 
+// Add coord at x,y if not visited yet
+function bfs_add_neighbor(x, y, queue, visited_list) {
+  var lis = [x, y];
+  if (!coord_in_canvas(lis))
+    return;
+  var index = xy_to_index(x,y);
+  if ((index in visited_list))
+    return;
+  queue.push(lis);
+  visited_list[index] = true;
+}
+
+
 // checks whether a coord is in the image
 function coord_in_canvas(coord){
-  return (coord[0] >= 0 && coord[0] < ctx_width && coord[1] >= 0 && coord[1] < ctx_height);
+  var x = coord[0],
+    y = coord[1];
+  return (x >= 0 && x < ctx_width && y >= 0 && y < ctx_height);
 }
 
 function xy_to_index(x,y){
@@ -134,11 +142,14 @@ function xy_to_index(x,y){
 }
 
 function scale_coord(coord){
-  return [coord[0]*dctx_width/ctx_width, coord[1]*dctx_height/ctx_height];
+  return [coord[0]*width_ratio, coord[1]*height_ratio];
 }
 
 function color_in_range(r,g,b,range){
-  var brushColorValue = (brush_color[0]-r)*(brush_color[0]-r) + (brush_color[1]-g)*(brush_color[1]-g) + (brush_color[2]-b)*(brush_color[2]-b);
+  var rd = brush_color[0] - r;
+  var gd = brush_color[1] - g;
+  var bd = brush_color[2] - b;
+  var brushColorValue = rd*rd + gd*gd + bd*bd;
   return (brushColorValue < range);
 }
 

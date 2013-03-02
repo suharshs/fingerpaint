@@ -15,3 +15,9 @@ socket.on('draw', function(data){
   }
 });
 
+socket.on('clear', function(data) {
+  if (video_started) {
+    clear_drawing(false);
+  }
+});
+

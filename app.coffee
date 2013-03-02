@@ -35,6 +35,9 @@ io.sockets.on 'connection', (socket) ->
     io.sockets.emit 'client_count',
       count: num_sockets
 
+  socket.on 'clear', (data) ->
+    socket.broadcast.emit 'clear', data
+
 
 
 port = process.env.PORT or 8000

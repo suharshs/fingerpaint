@@ -1,7 +1,7 @@
 // Global variable declarations
 var video,
   canvas, drawing,
-  ctx, dctx,
+  ctx, dctx, octx,
   width = window.innerHeight * 4/3, height = window.innerHeight,
   width,height,
   width,height,
@@ -63,18 +63,37 @@ function start_video(){
     var video = document.querySelector('video');
     video.src = window.URL.createObjectURL(localMediaStream);
     video.onloadedmetadata = function(e) {};
-    $(window).on("keydown",function(e){
-        $("#crosshair").fadeIn(1000);
+
+    var kd_handler = function(e){
+      alert('pressed ' + e.which);
+        switch (e.which){
+          // Letter 'c'
+          case 67:
+            clear_drawing(true);
+            break;
+          // Spacebar
+          case 32:
+            $("#crosshair").fadeIn(1000);
+            break;
+        }
         $(window).off("keydown");
-    });
-    $(window).on("keyup", function(e){
-        change_color();
-        $("#crosshair").fadeOut(1000);
-      $(window).on("keydown",function(e){
-          $("#crosshair").fadeIn(1000);
-        $(window).off("keydown");
-      });
-    });
+    };
+
+    var ku_handler = function(e) {
+      switch (e.which){
+          // Letter 'c'
+          case 67: break;
+          // Spacebar
+          case 32:
+            change_color();
+            $("#crosshair").fadeOut(1000);
+            break;
+        }
+      $(window).on("keydown", kd_handler);
+    };
+
+    $(window).on("keydown", kd_handler);
+    $(window).on("keyup", ku_handler);
     start_process_loop();
   }, function(err){
     console.log(err);
@@ -232,6 +251,16 @@ function draw_line(sx,sy,ex,ey,color,context){
   context.lineTo(endcoord[0] + 0.5, endcoord[1] + 0.5);
   context.stroke();
 }
+
+
+function clear_drawing(broadcast) {
+  octx.clearRect(0, 0, octx.width, octx.height);
+  dctx.clearRect(0, 0, dctx.width, dctx.height);
+  if (broadcast) {
+    socket.emit('clear', {});
+  }
+}
+
 
 // finally start the application
 init_brush_color();

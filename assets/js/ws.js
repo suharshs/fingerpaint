@@ -4,8 +4,9 @@ socket = io.connect();
 // TODO: UPDATE NEW USER ON CURRENT STATE
 
 socket.on('client_count', function(data){
-  console.log(data.count);
-  $('#user-count').text(data.count + " users online.");
+  var c = data.count;
+  console.log(c);
+  $('#user-count').text(c + " user"+(c>1?"s":"")+" online.");
 });
 
 socket.on('draw', function(data){

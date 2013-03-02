@@ -76,7 +76,10 @@ function start_video(){
       });
     });
     start_process_loop();
-  }, function(){console.log("couldn't connect to webcam");});
+  }, function(err){
+    console.log(err);
+    $('body').append("Couldn't connect to webcam");
+  });
 
   video = document.getElementById('video');
 }

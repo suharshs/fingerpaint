@@ -66,7 +66,7 @@ function change_color(){
 function start_process_loop(){
   set_up_color_grabber();
 
-  var offset = 1;
+  var offset = 5;
   window.setInterval(function() {
     ctx.drawImage(video, 0, 0, ctx_width, ctx_height);
 
@@ -75,12 +75,12 @@ function start_process_loop(){
     var coords = bfs_process(data,offset);
 
     if (coords){
-      offset = 1;
+      offset = 5;
       var r = brush_color[0], g = brush_color[1], b = brush_color[2];
       var color = 'rgb(' + r + ', ' + g+ ', ' + b + ')';
       draw(coords[0],coords[1], dctx, color);
     } else{
-      offset = 5;
+      offset = 10;
       started = false; // reset the draw function
     }
 
@@ -151,6 +151,8 @@ function draw (x,y,context,color) {
   y = coord[1];
   if (!started) {
     context.fillStyle = color;
+    context.lineWidth = 5;
+    context.lineCap = 'round';
     context.strokeStyle = color;
     context.beginPath();
     context.moveTo(x + 0.5, y + 0.5);

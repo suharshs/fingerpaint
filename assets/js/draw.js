@@ -103,7 +103,8 @@ function bfs_process(data, offset){
     var x = curr[0];
     var y = curr[1];
     var i = 4*xy_to_index(x,y);
-    if (color_in_range(data[i+0], data[i+1], data[i+2], 1000)){
+    var in_range = color_in_range(data[i+0], data[i+1], data[i+2], 2000);
+    if (in_range){
       prev_coord = curr;
       return curr;
     } else {

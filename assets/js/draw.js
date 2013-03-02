@@ -2,7 +2,7 @@
 var video,
   canvas, drawing,
   ctx, dctx,
-  width = 800, height = 600,
+  width = window.innerHeight * 4/3, height = window.innerHeight,
   ctx_width,ctx_height,
   dctx_width,dctx_height,
   width_ratio, height_ratio,

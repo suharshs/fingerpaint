@@ -10,27 +10,37 @@ body{
     display:none;
 }
 
-.back-canvas{
+.canvasdiv{
     position: absolute;
-    width: 100%; 
-    height: 100%;
-    overflow: hidden; 
-    opacity: 0.4;
+    width: 100%;
+    text-align:center;
+}
+
+.drawingdiv{
+    position: absolute;
+    width: 100%;
+    text-align:center;
+}
+
+.othersdiv{
+    position: absolute;
+    width: 100%;
+    text-align:center;
+}
+
+canvas{
+    display: inline;
+}
+
+.others-canvas{
+    opacity: 0.6;
 }
 
 .video-canvas{
-    position: absolute;
-    width: 800px; 
-    height: 600px;
-    overflow: hidden; 
-    opacity: .4;
+    opacity: 0.4;
 }
 
 .drawing-canvas{
-    position: absolute;
-    width: 800px; 
-    height: 600px;
-    overflow: hidden; 
     opacity: 1;
 }
 

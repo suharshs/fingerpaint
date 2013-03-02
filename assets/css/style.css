@@ -1,5 +1,5 @@
 body{
-    background: black;
+    background: url("/img/bg2.jpg");
 }
 
 .hide-video{
@@ -12,7 +12,9 @@ body{
 
 .canvasdiv{
     position: absolute;
+    top: -5px;
     width: 100%;
+    height: 100%;
     text-align:center;
 }
 
@@ -30,6 +32,9 @@ body{
 
 canvas{
     display: inline;
+    -webkit-box-shadow: 0 5px #000000;
+    -moz-box-shadow: 0 5px #000000;
+    box-shadow: 0 5px #000000;
 }
 
 .others-canvas{
@@ -37,7 +42,7 @@ canvas{
 }
 
 .video-canvas{
-    opacity: 0.4;
+    opacity: 1;
 }
 
 .drawing-canvas{

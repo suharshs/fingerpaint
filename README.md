@@ -3,6 +3,10 @@ FingerPaint
 ------------
 Paint with your fingers
 
+To run:
+    
+    node server.js
+
 Technologies used:
 ------------------
 * HTML5 Canvas and video
